@@ -1,0 +1,34 @@
+version: 2.0
+jobs:
+  buildService:
+    working_directory: /root/.go_workspace/src/github.com/lastmilelink/email-resource
+    docker:
+      - image: lmlt/builder:latest
+    steps:
+      - checkout
+      - run:
+          name: glide install
+          command: glide install
+      - setup_remote_docker
+      - run:
+          name: make
+          command: make
+      - run:
+          name: Login to dockerhub
+          command: echo "dperezmavrogenis@lastmilelink.com" | docker login --username "${DOCKER_CLOUD_USERNAME}" --password "${DOCKER_CLOUD_PASSWORD}"
+      - run:
+          name: Push Docker image versioned
+          command: docker push lmlt/email-resource:${CIRCLE_BUILD_NUM}
+      - run:
+          name: Push Docker image latest
+          command: docker push lmlt/email-resource:latest
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - buildService:
+          filters:
+            branches:
+              only:
+                - master
