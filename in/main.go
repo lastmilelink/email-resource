@@ -33,5 +33,7 @@ func main() {
 	stdoutOutput, err := json.Marshal(output)
 	checkError(err, fmt.Sprintf("error marshalling output for stdout: %v", err))
 
+	// according to docs, in script must emit a version
+	// https://concourse.ci/implementing-resources.html#in
 	fmt.Printf("%s", []byte(stdoutOutput))
 }
