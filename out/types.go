@@ -8,6 +8,7 @@ type OutInput struct {
 type Source struct {
 	AccessKeyId     string `json:"access_key_id"`
 	SecretAccessKey string `json:"secret_access_key"`
+	AwsRegion       string `json:"secret_access_key"`
 }
 
 type EmailParams struct {
