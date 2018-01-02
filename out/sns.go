@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -49,19 +48,19 @@ func (s *snsClient) publishMessage(subject, body string) (*sns.PublishOutput, er
 	return s.snsService.Publish(&input)
 }
 
-func (s *snsClient) publish(messageDetails EmailParams) error {
+func (s *snsClient) publish(params Parameters) error {
 	output, err := s.createTopic()
 	s.topicArn = *output.TopicArn
 	if err != nil {
 		return fmt.Errorf("An error occured while creating the topic: %v", err)
 	}
-	log.Printf("[+] Created topic %s\n", *output.TopicArn)
+	logf("[+] Created topic %s\n", *output.TopicArn)
 
-	pOutput, err := s.publishMessage(messageDetails.EmailSubject, messageDetails.EmailBody)
+	pOutput, err := s.publishMessage(params.EmailSubject, params.EmailBody)
 	if err != nil {
 		return fmt.Errorf("Error publishing message: %v", err)
 	}
-	log.Printf("Published messaged with id %s\n", *pOutput.MessageId)
+	logf("Published messaged with id %s\n", *pOutput.MessageId)
 
 	return nil
 }

@@ -1,11 +1,10 @@
 package main
 
-import (
-	"log"
-)
+import "os"
 
 func checkErrorFail(err error, errorMessage string) {
 	if err != nil {
-		log.Fatalf("[-] Error occured: %s", errorMessage)
+		logf("[-] Error occured: %s", errorMessage)
+		os.Exit(1)
 	}
 }

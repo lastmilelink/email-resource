@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"os"
 )
 
@@ -16,17 +15,17 @@ func main() {
 	err = json.Unmarshal(programInput, &inputJson)
 	checkErrorFail(err, fmt.Sprintf("An error occured while unmarshalling the input: %v", err))
 
-	log.Println("[*] Creating config...")
+	logln("[*] Creating config...")
 	config := initConfig(
-		inputJson.Source.AccessKeyId,
-		inputJson.Source.SecretAccessKey,
-		inputJson.Source.AwsRegion,
+		inputJson.Params.AccessKeyId,
+		inputJson.Params.SecretAccessKey,
+		inputJson.Params.AwsRegion,
 	)
 
-	log.Println("[*] Creating client...")
+	logln("[*] Creating client...")
 	snsClient := newSnsClient(config, inputJson.Params.TopicName)
 
-	log.Println("[*] Publishing message...")
+	logln("[*] Publishing message...")
 	err = snsClient.publish(inputJson.Params)
 	checkErrorFail(
 		err,

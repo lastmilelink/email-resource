@@ -12,7 +12,7 @@ type OutputMetadata struct {
 	Value string `json:"value"`
 }
 
-func generateOutput(params EmailParams) Output {
+func generateOutput(params Parameters) Output {
 	var out Output
 	out.Version = time.Now().String()
 
