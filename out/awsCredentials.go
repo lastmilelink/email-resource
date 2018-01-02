@@ -18,15 +18,10 @@ var mandatoryEnvironmentVariables []string = []string{
 	"REGION",
 }
 
-func initConfig() awsConfiguration {
-	for _, v := range mandatoryEnvironmentVariables {
-		if os.Getenv(v) == "" {
-			log.Fatalf("Error reading variable %s\n", v)
-		}
-	}
+func initConfig(accessKeyId, secretAccessKey, region string) awsConfiguration {
 
-	creds := credentials.NewEnvCredentials()
-	credValues, err := creds.Get()
+	creds := credentials.NewStaticCredentials(accessKeyId, secretAccessKey, "")
+	_, err := creds.Get()
 	if err != nil {
 		log.Fatalf("An error occured while getting the credentials from the environment: %v", err)
 	}

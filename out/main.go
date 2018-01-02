@@ -22,5 +22,13 @@ func main() {
 	stdOut, err := json.Marshal(output)
 	checkError(err, fmt.Sprintf("Error marshaling json output: %v", err))
 
+	config := initConfig(
+		inputJson.Source.AccessKeyId,
+		inputJson.Source.SecretAccessKey,
+		inputJson.Source.AwsRegion,
+	)
+	snsClient := newSnsClient(config, inputJson.Params.TopicName)
+	snsClient.publish(inputJson.Params)
+
 	fmt.Println(string(stdOut))
 }
