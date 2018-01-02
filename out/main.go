@@ -16,17 +16,17 @@ func main() {
 	err = json.Unmarshal(programInput, &inputJson)
 	checkErrorFail(err, fmt.Sprintf("An error occured while unmarshalling the input: %v", err))
 
-	log.Println("[+] Creating config")
+	log.Println("[*] Creating config...")
 	config := initConfig(
 		inputJson.Source.AccessKeyId,
 		inputJson.Source.SecretAccessKey,
 		inputJson.Source.AwsRegion,
 	)
 
-	log.Println("[+] Creating client")
+	log.Println("[*] Creating client...")
 	snsClient := newSnsClient(config, inputJson.Params.TopicName)
 
-	log.Println("[+] Publishing message")
+	log.Println("[*] Publishing message...")
 	err = snsClient.publish(inputJson.Params)
 	checkErrorFail(
 		err,
