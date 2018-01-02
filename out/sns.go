@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -10,6 +10,7 @@ import (
 
 type snsClient struct {
 	topicName        string
+	topicArn         string
 	awsConfiguration awsConfiguration
 	snsService       *sns.SNS
 }
@@ -33,34 +34,34 @@ func newSnsClient(config awsConfiguration, topicName string) snsClient {
 	}
 }
 
-func (s snsClient) createTopic() (*sns.CreateTopicOutput, error) {
+func (s *snsClient) createTopic() (*sns.CreateTopicOutput, error) {
 	return s.snsService.CreateTopic(&sns.CreateTopicInput{Name: &s.topicName})
 }
 
-func (s snsClient) getTopicAttributes() (*sns.GetTopicAttributesOutput, error) {
-	topicArn := fmt.Sprintf(
-		"arn:aws:sns:%s:%s:%s",
-		s.awsConfiguration.region,
-		"accountId",
-		s.topicName,
-	)
-	return s.snsService.GetTopicAttributes(
-		&sns.GetTopicAttributesInput{
-			TopicArn: &topicArn,
-		},
-	)
+func (s *snsClient) publishMessage(subject, body string) (*sns.PublishOutput, error) {
+	input := sns.PublishInput{
+		Message: &body,
+		Subject: &subject,
+	}
+
+	return s.snsService.Publish(&input)
 }
 
-func (s snsClient) publish(messageDetails EmailParams) {
-	// out, err := s.getTopicAttributes()
-	// if err != nil {
-	// 	if err.Error() != sns.ErrCodeNotFoundException {
-	// 		log.Fatalf("")
-	// 	}
-	// }
+func (s *snsClient) publish(messageDetails EmailParams) error {
+	output, err := s.createTopic()
+	s.topicArn = *output.TopicArn
+	if err != nil {
+		log.Printf("An error occured while creating the topic: %v", err)
+		return err
+	}
+	log.Printf("[+] Created topic %s\n", *output.TopicArn)
 
-	// if err.Error() == sns.ErrCodeNotFoundException {
-	_, err := s.createTopic()
-	checkError(err, fmt.Sprintf("An error occured while creating the topic: %v", err))
-	// }
+	pOutput, err := s.publishMessage(messageDetails.EmailSubject, messageDetails.EmailBody)
+	if err != nil {
+		log.Printf("Error ppublushing message: %v", err)
+		return err
+	}
+	log.Printf("Published messaged with id %s\n", *pOutput.MessageId)
+
+	return nil
 }
