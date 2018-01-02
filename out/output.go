@@ -3,7 +3,7 @@ package main
 import "time"
 
 type Output struct {
-	Version  string           `json:"version"`
+	Version  int64            `json:"version"`
 	Metadata []OutputMetadata `json:"metadata"`
 }
 
@@ -14,7 +14,7 @@ type OutputMetadata struct {
 
 func generateOutput(params Parameters) Output {
 	var out Output
-	out.Version = time.Now().String()
+	out.Version = time.Now().Unix()
 
 	out.Metadata = []OutputMetadata{
 		OutputMetadata{Key: "TopicName", Value: params.TopicName},
