@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -25,6 +26,8 @@ func newSnsClient(config awsConfiguration, topicName string) snsClient {
 	)
 
 	snsService := sns.New(sess)
+
+	log.Println(snsService.Config)
 
 	return snsClient{
 		snsService:       snsService,
