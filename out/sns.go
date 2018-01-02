@@ -60,7 +60,7 @@ func (s *snsClient) publish(params Parameters) error {
 	if err != nil {
 		return fmt.Errorf("Error publishing message: %v", err)
 	}
-	logf("Published messaged with id %s\n", *pOutput.MessageId)
+	logf("[+] Published messaged with id %s\n", *pOutput.MessageId)
 
 	return nil
 }
