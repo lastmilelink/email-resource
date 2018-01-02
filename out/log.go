@@ -6,7 +6,7 @@ import (
 )
 
 func logln(msg string) {
-	logf("%s", msg)
+	logf("%s\n", msg)
 }
 
 func logf(format string, msg ...string) {
