@@ -1,9 +1,12 @@
 package main
 
-import "time"
+import (
+	"strconv"
+	"time"
+)
 
 type Output struct {
-	Version  int64            `json:"version"`
+	Version  string           `json:"version"`
 	Metadata []OutputMetadata `json:"metadata"`
 }
 
@@ -14,7 +17,7 @@ type OutputMetadata struct {
 
 func generateOutput(params Parameters) Output {
 	var out Output
-	out.Version = time.Now().Unix()
+	out.Version = strconv.Itoa(time.Now().UTC().Nanosecond())
 
 	out.Metadata = []OutputMetadata{
 		OutputMetadata{Key: "TopicName", Value: params.TopicName},
