@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -21,10 +20,10 @@ var mandatoryEnvironmentVariables []string = []string{
 func initConfig(accessKeyId, secretAccessKey, region string) awsConfiguration {
 
 	creds := credentials.NewStaticCredentials(accessKeyId, secretAccessKey, "")
-	_, err := creds.Get()
-	if err != nil {
-		log.Fatalf("An error occured while getting the credentials from the environment: %v", err)
-	}
+	// _, err := creds.Get()
+	// if err != nil {
+	// 	log.Fatalf("An error occured while getting the credentials from the environment: %v", err)
+	// }
 
 	return awsConfiguration{
 		credentials: creds,
