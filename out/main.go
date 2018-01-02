@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"os"
 )
 
@@ -19,7 +20,7 @@ func main() {
 	stdOut, err := json.Marshal(output)
 	checkError(err, fmt.Sprintf("Error marshaling json output: %v", err))
 
-	fmt.Println("KeyId", inputJson.Source.AccessKeyId)
+	log.Println("KeyId", inputJson.Source.AccessKeyId)
 	config := initConfig(
 		inputJson.Source.AccessKeyId,
 		inputJson.Source.SecretAccessKey,
