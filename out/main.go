@@ -31,6 +31,7 @@ func main() {
 	output := generateOutput(inputJson.Params)
 
 	stdOut, err := json.Marshal(output)
+
 	checkError(err, fmt.Sprintf("Error marshaling json output: %v", err))
 
 	fmt.Println(string(stdOut))
