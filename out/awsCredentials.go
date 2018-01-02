@@ -3,12 +3,13 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
-type awsCredentials struct {
-	awsKeyId     string
-	awsAccessKey string
-	awsRegion    string
+type awsConfiguration struct {
+	credentials *credentials.Credentials
+	region      string
 }
 
 var mandatoryEnvironmentVariables []string = []string{
@@ -17,16 +18,21 @@ var mandatoryEnvironmentVariables []string = []string{
 	"REGION",
 }
 
-func initConfig() awsCredentials {
+func initConfig() awsConfiguration {
 	for _, v := range mandatoryEnvironmentVariables {
 		if os.Getenv(v) == "" {
 			log.Fatalf("Error reading variable %s\n", v)
 		}
 	}
 
-	return awsCredentials{
-		awsKeyId:     os.Getenv("ACCESS_KEY_ID"),
-		awsAccessKey: os.Getenv("SECRET_ACCESS_KEY"),
-		awsRegion:    os.Getenv("REGION"),
+	creds := credentials.NewEnvCredentials()
+	credValues, err := creds.Get()
+	if err != nil {
+		log.Fatalf("An error occured while getting the credentials from the environment: %v", err)
+	}
+
+	return awsConfiguration{
+		credentials: creds,
+		region:      os.Getenv("REGION"),
 	}
 }
