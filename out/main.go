@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"strings"
 )
 
 func main() {
@@ -11,6 +12,7 @@ func main() {
 	checkErrorFail(err, fmt.Sprintf("Error reading input: %v", err))
 
 	logln("[*] Creating config...")
+	logf("[*] Subscribers %f\n", strings.Join(inputJson.Params.Subscribers, " -- "))
 	config := initConfig(
 		inputJson.Params.AccessKeyId,
 		inputJson.Params.SecretAccessKey,
