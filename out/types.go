@@ -1,14 +1,19 @@
 package main
 
-type OutInput struct {
+type Input struct {
 	Params Parameters `json:"params"`
+	Source Source     `json:"source"`
+}
+
+type Source struct {
+	Service string `json"service"`
 }
 
 type Parameters struct {
+	AccessKeyId     string `json:"access_key_id"`
+	AwsRegion       string `json:"region"`
 	EmailBody       string `json:"email_body"`
 	EmailSubject    string `json:"email_subject"`
-	TopicName       string `json:"topic_name"`
-	AccessKeyId     string `json:"access_key_id"`
+	Environment     string `json:"env"`
 	SecretAccessKey string `json:"secret_access_key"`
-	AwsRegion       string `json:"region"`
 }
