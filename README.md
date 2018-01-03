@@ -1,6 +1,6 @@
 # Introduction
 
-This is a resource to send emails via AWS SNS. It will create a topic (per service), if one doesn't already exist, and it will be named `<SERVICE NAME>-concourse-<ENV>`
+This is a resource to send emails via AWS SNS. It will create a topic (per service), if one doesn't already exist, and it will be named `<SERVICE NAME>-concourse-<ENV>`. Each email in the `subscribers` list is only registered once per topic, to avoid multi-subscription of a recipient (i.e. a subscription iss only added if one doesn't already exist).
 
 # Actions
 
