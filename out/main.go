@@ -12,7 +12,12 @@ func main() {
 	checkErrorFail(err, fmt.Sprintf("Error reading input: %v", err))
 
 	logln("[*] Creating config...")
-	logf("[*] Subscribers %s\n", strings.Join(inputJson.Params.Subscribers, " -- "))
+	logln(
+		fmt.Sprintf(
+			"[*] Subscribers (%d) %s\n",
+			len(inputJson.Params.Subscribers),
+			strings.Join(inputJson.Params.Subscribers, " -- "),
+		))
 	config := initConfig(
 		inputJson.Params.AccessKeyId,
 		inputJson.Params.SecretAccessKey,
