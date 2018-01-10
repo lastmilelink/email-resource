@@ -9,10 +9,17 @@ import (
 	"github.com/aws/aws-sdk-go/service/sns"
 )
 
+type awsSnsService interface {
+	CreateTopic(*sns.CreateTopicInput) (*sns.CreateTopicOutput, error)
+	ListSubscriptionsByTopic(*sns.ListSubscriptionsByTopicInput) (*sns.ListSubscriptionsByTopicOutput, error)
+	Publish(*sns.PublishInput) (*sns.PublishOutput, error)
+	Subscribe(*sns.SubscribeInput) (*sns.SubscribeOutput, error)
+}
+
 type snsClient struct {
 	awsConfiguration awsConfiguration
 	environment      string
-	snsService       *sns.SNS
+	snsService       awsSnsService
 	topicArn         string
 	topicName        string
 }
@@ -94,6 +101,8 @@ func (s *snsClient) subscribe(subscribers []string) error {
 	if err != nil {
 		return fmt.Errorf("Unable to list subscriptions by topic: %v", err)
 	}
+
+	logln(fmt.Sprintf("[*] Found %d subscriptions: %v", len(subscriptions), subscriptions))
 
 	var endpoints = make(map[string]bool)
 
