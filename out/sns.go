@@ -75,6 +75,10 @@ func (s *snsClient) listSubscriptionsByTopic() ([]*sns.Subscription, error) {
 		return nil, fmt.Errorf("Unable to perform first call to listSubscriptionsByTopic: %v", err)
 	}
 
+	if len(response.Subscriptions) > 0 {
+		result = append(result, response.Subscriptions...)
+	}
+
 	for response.NextToken != nil {
 		result = append(result, response.Subscriptions...)
 		response, err = s.snsService.ListSubscriptionsByTopic(s.createListSubscriptionsInput(nil))
