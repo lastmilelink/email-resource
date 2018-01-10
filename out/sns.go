@@ -102,7 +102,9 @@ func (s *snsClient) subscribe(subscribers []string) error {
 		return fmt.Errorf("Unable to list subscriptions by topic: %v", err)
 	}
 
-	logln(fmt.Sprintf("[*] Found %d subscriptions: %v", len(subscriptions), subscriptions))
+	logln(
+		fmt.Sprintf("[*] Found %d subscriptions for %s: %v", len(subscriptions), s.topicArn, subscriptions),
+	)
 
 	var endpoints = make(map[string]bool)
 
