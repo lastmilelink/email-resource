@@ -6,6 +6,8 @@ jobs:
       - image: lmlt/builder:latest
     steps:
       - checkout
+      - restore_cache:
+          key: vendor-{{ checksum "glide.yaml" }}
       - run:
           name: glide install
           command: glide install
@@ -28,6 +30,10 @@ jobs:
       - run:
           name: Push Docker image latest
           command: docker push lmlt/email-resource:latest
+      - save_cache:
+          key: vendor-{{ checksum "glide.yaml" }}
+          paths:
+            - ./vendor
 
 workflows:
   version: 2
