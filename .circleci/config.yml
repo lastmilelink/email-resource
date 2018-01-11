@@ -11,6 +11,9 @@ jobs:
       - run:
           name: glide install
           command: glide install
+      - run:
+          name: go test
+          command: go test
       - setup_remote_docker
       - run:
           name: make
