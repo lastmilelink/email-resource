@@ -84,3 +84,40 @@ func TestListSubscriptionsByTopic(t *testing.T) {
 		}
 	}
 }
+
+func TestSubscribe(t *testing.T) {
+	type test struct {
+		mock        AWSMockSns
+		s           snsClient
+		subscribers []string
+		want        []string
+	}
+
+	tests := []test{
+		{
+			mock:        AWSMockSns{returnMultiple: false},
+			s:           snsClient{},
+			subscribers: []string{"test-3"},
+			want:        []string{},
+		},
+		{
+			mock:        AWSMockSns{returnMultiple: false},
+			s:           snsClient{},
+			subscribers: []string{"test-1", "test-2"},
+			want:        []string{"test-1", "test-2"},
+		},
+	}
+
+	for te_i, te := range tests {
+		te.s.snsService = te.mock
+		res, _ := te.s.subscribe(te.subscribers)
+		if len(res) != len(te.want) {
+			t.Errorf("Length mismatch for subscribers: got(%d) and want(%d) for test %d.", len(res), len(te.want), te_i)
+		}
+		for i, _ := range res {
+			if res[i] != te.want[i] {
+				t.Errorf("New subscription at index %d is %s, but want %s for test %d", i, res[i], te.want[i], te_i)
+			}
+		}
+	}
+}

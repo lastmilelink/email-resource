@@ -100,10 +100,10 @@ func (s *snsClient) createSubscription(endpoint string) (*sns.SubscribeOutput, e
 	)
 }
 
-func (s *snsClient) subscribe(subscribers []string) error {
+func (s *snsClient) subscribe(subscribers []string) ([]string, error) {
 	subscriptions, err := s.listSubscriptionsByTopic()
 	if err != nil {
-		return fmt.Errorf("Unable to list subscriptions by topic: %v", err)
+		return nil, fmt.Errorf("Unable to list subscriptions by topic: %v", err)
 	}
 
 	logln(
@@ -116,18 +116,20 @@ func (s *snsClient) subscribe(subscribers []string) error {
 		endpoints[*v.Endpoint] = true
 	}
 
+	var newSubscriptions []string
 	for _, v := range subscribers {
 		if !endpoints[v] {
 			logln(fmt.Sprintf("[*] Creating subscription for %s", v))
-			res, err := s.createSubscription(v)
+			_, err := s.createSubscription(v)
 			if err != nil {
-				return fmt.Errorf("Error creating subscriptions for %s :%v", v, err)
+				return nil, fmt.Errorf("Error creating subscriptions for %s :%v", v, err)
 			}
-			logln(fmt.Sprintf("    subscriptionArn is %s", *res.SubscriptionArn))
+
+			newSubscriptions = append(newSubscriptions, v)
 		}
 	}
 
-	return nil
+	return newSubscriptions, nil
 }
 
 func (s *snsClient) publish(params Parameters) (*sns.PublishOutput, error) {
@@ -139,10 +141,12 @@ func (s *snsClient) publish(params Parameters) (*sns.PublishOutput, error) {
 	logf("[+] Created topic %s\n", *output.TopicArn)
 
 	logf("[*] Adding subscriptions for %s\n", strings.Join(params.Subscribers, ", "))
-	err = s.subscribe(params.Subscribers)
+	newSubscriptions, err := s.subscribe(params.Subscribers)
 	if err != nil {
 		return nil, fmt.Errorf("Error when calling subscribe: %v", err)
 	}
+
+	logln(fmt.Sprintf("Created new ssubscriptions: %v", newSubscriptions))
 
 	pOutput, err := s.publishMessage(params.EmailSubject, params.EmailBody)
 	if err != nil {
