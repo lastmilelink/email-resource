@@ -12,7 +12,14 @@ type awsConfiguration struct {
 }
 
 func initConfig(accessKeyId, secretAccessKey, region, service, environment string) awsConfiguration {
-	creds := credentials.NewStaticCredentials(accessKeyId, secretAccessKey, "")
+	var creds *credentials.Credentials
+	if accessKeyId == "" || secretAccessKey == "" {
+		logln("[*] static credentials not found, using session")
+		creds = credentials.NewEnvCredentials()
+	} else {
+		logln("[*] using static credentials")
+		creds = credentials.NewStaticCredentials(accessKeyId, secretAccessKey, "")
+	}
 
 	return awsConfiguration{
 		credentials: creds,
