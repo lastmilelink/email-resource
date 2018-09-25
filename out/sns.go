@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/sns"
 )
 
@@ -27,15 +25,8 @@ type snsClient struct {
 var protocol string = "email"
 
 func newSnsClient(config awsConfiguration) snsClient {
-	sess := session.Must(
-		session.NewSession(
-			&aws.Config{
-				Region: &config.region,
-			},
-		),
-	)
 
-	snsService := sns.New(sess)
+	snsService := sns.New(config.sess)
 
 	return snsClient{
 		awsConfiguration: config,

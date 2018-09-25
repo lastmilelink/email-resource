@@ -19,8 +19,6 @@ func main() {
 			strings.Join(inputJson.Params.Subscribers, " -- "),
 		))
 	config := initConfig(
-		inputJson.Params.AccessKeyId,
-		inputJson.Params.SecretAccessKey,
 		inputJson.Params.AwsRegion,
 		inputJson.Source.Service,
 		inputJson.Params.Environment,
