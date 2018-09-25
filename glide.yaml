@@ -1,4 +1,4 @@
-package: .
+package: github.com/lastmilelink/email-resource
 import:
 - package: github.com/aws/aws-sdk-go
   version: ~1.12.54
