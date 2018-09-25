@@ -30,8 +30,7 @@ func newSnsClient(config awsConfiguration) snsClient {
 	sess := session.Must(
 		session.NewSession(
 			&aws.Config{
-				Region:      &config.region,
-				Credentials: config.credentials,
+				Region: &config.region,
 			},
 		),
 	)
