@@ -47,10 +47,12 @@ func newSnsClient(config awsConfiguration) snsClient {
 }
 
 func (s *snsClient) createTopic() (*sns.CreateTopicOutput, error) {
+	logln("[*] creating topic...")
 	return s.snsService.CreateTopic(&sns.CreateTopicInput{Name: &s.topicName})
 }
 
 func (s *snsClient) publishMessage(subject, body string) (*sns.PublishOutput, error) {
+	logln("[*] publishing message...")
 	input := sns.PublishInput{
 		Message:  &body,
 		Subject:  &subject,

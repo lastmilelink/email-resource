@@ -29,7 +29,6 @@ func main() {
 	logln("[*] Creating client...")
 	snsClient := newSnsClient(config)
 
-	logln("[*] Publishing message...")
 	publishOut, err := snsClient.publish(inputJson.Params)
 	checkErrorFail(
 		err,
