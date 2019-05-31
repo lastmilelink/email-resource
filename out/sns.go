@@ -32,7 +32,7 @@ func newSnsClient(config awsConfiguration) snsClient {
 		awsConfiguration: config,
 		environment:      config.environment,
 		snsService:       snsService,
-		topicName:        fmt.Sprintf("%s-concourse-%s", config.service, config.environment),
+		topicName:        "concourse-email",
 	}
 }
 
