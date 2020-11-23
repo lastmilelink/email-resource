@@ -19,8 +19,8 @@ jobs:
           name: make
           command: make
       - run:
-          name: Login to dockerhub
-          command: echo "dperezmavrogenis@lastmilelink.com" | docker login --username "${DOCKER_CLOUD_USERNAME}" --password "${DOCKER_CLOUD_PASSWORD}"
+          name: login to AWS ECR
+          command: eval $(aws ecr get-login --no-include-email --region eu-west-1)
       - run:
           name: docker build
           command: docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-1.amazonaws.com/email-resource:latest . && docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.eu-west-1.amazonaws.com/email-resource:${CIRCLE_BUILD_NUM} .
