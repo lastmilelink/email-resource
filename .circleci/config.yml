@@ -23,13 +23,13 @@ jobs:
           command: echo "dperezmavrogenis@lastmilelink.com" | docker login --username "${DOCKER_CLOUD_USERNAME}" --password "${DOCKER_CLOUD_PASSWORD}"
       - run:
           name: docker build
-          command: docker build --tag lmlt/email-resource:latest . && docker build --tag lmlt/email-resource:${CIRCLE_BUILD_NUM} .
+          command: docker build --tag $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/email-resource:latest . && docker build --tag $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/email-resource:${CIRCLE_BUILD_NUM} .
       - run:
           name: Push Docker image versioned
-          command: docker push lmlt/email-resource:${CIRCLE_BUILD_NUM}
+          command: docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/email-resource:${CIRCLE_BUILD_NUM}
       - run:
           name: Push Docker image latest
-          command: docker push lmlt/email-resource:latest
+          command: docker push $AWS_ACCOUNT_ID.dkr.ecr.eu-west-1.amazonaws.com/email-resource:latest
       - save_cache:
           key: vendor-{{ checksum "glide.yaml" }}
           paths:
